@@ -33,8 +33,12 @@ module.exports = class Badge
     return
 
   measure: (ctx) ->
+    ctx.save()
+    ctx.font = font
     textWidth = if @text then ctx.measureText(@text).width else width
-    return h: @getHeight(), w: textWidth + 2*margin_x
+    dim = h: @getHeight(), w: textWidth + 2*margin_x
+    ctx.restore()
+    return dim
 
   drawBackground: (ctx, {w, h}) ->
     ctx.fillStyle = '#444'
