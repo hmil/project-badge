@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project-Badge example</title>
+</head>
+<body>
+  <canvas width="300" height="300" id="canvas" style="margin: 30px"></canvas>
+
+  <script src="../dist/badge.min.js"></script>
+  <script>
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  var myBadge = new badge.Boolean({
+    text: 'build',
+    status: true,
+    statusText: 'passing'
+  });
+
+  myBadge.renderTo(ctx, 0, 0);
+
+  myBadge.status = false;
+  myBadge.statusText = 'failed';
+  myBadge.renderTo(ctx, 0, 40);
+
+  var myProgress = new badge.Progress({
+    text: 'coverage',
+    progress: 40,
+    unit: '%',
+    bounds: [50, 80]
+  });
+
+  myProgress.renderTo(ctx, 0, 80);
+  myProgress.progress = 75
+  myProgress.renderTo(ctx, 0, 120);
+  myProgress.progress = 87
+  myProgress.renderTo(ctx, 0, 160);
+    
+  </script>
+</body>
+</html>
