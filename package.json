@@ -1,7 +1,15 @@
 {
   "name": "project-badge",
   "version": "0.0.0",
-  "description": "A js lib to generate badges using html5 canvas.",
+  "description": "Generate any kind of badge using the html5 canvas API.",
+  "homepage": "https://github.com/hmil/project-badge",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hmil/project-badge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hmil/project-badge/issues"
+  },
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +18,13 @@
   "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-browserify": "^3.0.1",
+    "grunt-browserify": "~3.0.1",
     "grunt-contrib-coffee": "~0.12.0",
     "grunt-contrib-uglify": "^0.6.0"
-  }
+  },
+  "keywords": [
+    "badge",
+    "ci",
+    "continuous integration"
+  ]
 }
