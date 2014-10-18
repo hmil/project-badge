@@ -7,21 +7,24 @@
 <body>
   <canvas width="300" height="300" id="canvas" style="margin: 30px"></canvas>
 
-  <script src="../dist/badge.min.js"></script>
+  <script src="../dist/badge.js"></script>
   <script>
   var ctx = document.getElementById('canvas').getContext('2d');
 
   var myBadge = new badge.Boolean({
     text: 'build',
     status: true,
-    statusText: 'passing'
+    successText: 'passing',
+    failureText: 'failed'
   });
 
-  myBadge.renderTo(ctx, 0, 0);
-
+  myBadge.renderTo(ctx);
   myBadge.status = false;
-  myBadge.statusText = 'failed';
   myBadge.renderTo(ctx, 0, 40);
+  myBadge.inverse = true;
+  myBadge.renderTo(ctx, 140, 40);
+  myBadge.status = true;
+  myBadge.renderTo(ctx, 140, 0);
 
   var myProgress = new badge.Progress({
     text: 'coverage',

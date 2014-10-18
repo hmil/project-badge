@@ -47,12 +47,16 @@
     };
 
     Badge.prototype.measure = function(ctx) {
-      var textWidth;
+      var dim, textWidth;
+      ctx.save();
+      ctx.font = font;
       textWidth = this.text ? ctx.measureText(this.text).width : width;
-      return {
+      dim = {
         h: this.getHeight(),
         w: textWidth + 2 * margin_x
       };
+      ctx.restore();
+      return dim;
     };
 
     Badge.prototype.drawBackground = function(ctx, _arg) {
@@ -143,23 +147,41 @@
 
     Boolean.prototype.drawForeground = function(ctx, dimentions) {
       Boolean.__super__.drawForeground.call(this, ctx, dimentions);
-      return this.drawText(ctx, dimentions, this.statusText, {
+      return this.drawText(ctx, dimentions, this.getText(), {
         align: 'right',
         margin: 5
       });
     };
 
+    Boolean.prototype.getText = function() {
+      var text;
+      text = this.getStatus() ? this.successText : this.failureText;
+      if (text != null) {
+        return text;
+      }
+      return this.statusText;
+    };
+
+    Boolean.prototype.getStatus = function() {
+      if (this.inverse) {
+        return !this.status;
+      } else {
+        return this.status;
+      }
+    };
+
     Boolean.prototype.drawBackground = function(ctx, dimentions) {
-      var statusWidth;
+      var statusWidth, unused;
       Boolean.__super__.drawBackground.call(this, ctx, dimentions);
-      ctx.fillStyle = this.status ? '#0a0' : '#a00';
+      ctx.fillStyle = this.getStatus() ? '#0a0' : '#a00';
       statusWidth = this.measureStatus(ctx);
+      unused = 1;
       return ctx.fillRect(dimentions.w - statusWidth, 0, statusWidth, dimentions.h);
     };
 
     Boolean.prototype.measureStatus = function(ctx) {
       var textWidth;
-      textWidth = this.statusText ? ctx.measureText(this.statusText).width : 20;
+      textWidth = this.getText() ? ctx.measureText(this.getText()).width : 20;
       return textWidth + 2 * 5;
     };
 
