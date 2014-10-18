@@ -4,6 +4,8 @@ module.exports = class Progress extends Badge
 
   constructor: (params) ->
     params.text += ':'
+    if (!params.bounds) then params.bounds = [40, 80]
+    if (!params.unit) then params.unit = '%'
     super(params)
 
   measure: (ctx) ->

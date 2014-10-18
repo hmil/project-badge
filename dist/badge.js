@@ -204,6 +204,12 @@
 
     function Progress(params) {
       params.text += ':';
+      if (!params.bounds) {
+        params.bounds = [40, 80];
+      }
+      if (!params.unit) {
+        params.unit = '%';
+      }
       Progress.__super__.constructor.call(this, params);
     }
 
