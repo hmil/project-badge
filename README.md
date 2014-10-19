@@ -1,7 +1,7 @@
 project-badge
 =============
 
-Create fancy badges for your projects in plain JS !
+Create fancy badges for your projects in plain JS.
 
 # Usage
 
@@ -24,13 +24,13 @@ Download [badge.js](https://raw.githubusercontent.com/hmil/project-badge/master/
   </body>
 </html>
 ```
-Et voilà, a shiny custom badge in just two lines of code and 3 config parameters !  
+Et voilà, a shiny custom badge in just two lines of code and 3 config parameters.  
 ![Le wild badge appears in the browser](https://raw.githubusercontent.com/hmil/project-badge/master/images/badge_in_browser.png)
 
 ## In node
 This module is available as an npm package `npm install project-package`  
 You should check out [node-canvas](https://github.com/Automattic/node-canvas) which provides a compatible canvas API in node.
-Actually, it's what's being used in [node-project-badge](https://github.com/hmil/node-project-badge) to provide a CLI badge generator !
+Actually, it's what's being used in [node-project-badge](https://github.com/hmil/node-project-badge) to provide a CLI badge generator.
 
 # One badge for every thing
 
@@ -166,3 +166,8 @@ To implement custom measurments, override `doMeasure`
 The following parameters are assumed to be necessary for any class implementing a badge
 - `text` (String): default text shown in the badge, left aligned
 
+
+# Changelog
+
+**0.1.0** -- *Oct 19, 2014*
+Initial project-badge release

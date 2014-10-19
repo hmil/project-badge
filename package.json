@@ -1,6 +1,6 @@
 {
   "name": "project-badge",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Generate any kind of badge using the html5 canvas API.",
   "homepage": "https://github.com/hmil/project-badge",
   "repository": {
