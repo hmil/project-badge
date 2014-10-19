@@ -3,9 +3,9 @@ project-badge
 
 Create fancy badges for your projects in plain JS !
 
-## Usage
+# Usage
 
-### In the browser
+## In the browser
 Download [badge.js](https://raw.githubusercontent.com/hmil/project-badge/master/dist/badge.js), and start having fun with badges !
 
 ```html
@@ -24,15 +24,15 @@ Download [badge.js](https://raw.githubusercontent.com/hmil/project-badge/master/
   </body>
 </html>
 ```
-Et voilà, a shiny custom badge in just two lines of code and 3 config parameters !
+Et voilà, a shiny custom badge in just two lines of code and 3 config parameters !  
 ![Le wild badge appears in the browser](https://raw.githubusercontent.com/hmil/project-badge/master/images/badge_in_browser.png)
 
-### In node
+## In node
 This module is available as an npm package `npm install project-package`  
 You should check out [node-canvas](https://github.com/Automattic/node-canvas) which provides a compatible canvas API in node.
 Actually, it's what's being used in [node-project-badge](https://github.com/hmil/node-project-badge) to provide a CLI badge generator !
 
-## One badge for every thing
+# One badge for every thing
 
 Progress:
 ```javascript
@@ -41,7 +41,7 @@ var myBadge = new badge.Progress({
   progress: 32,
 });
 ```
-![Progress badge 32%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking32.png) ![Progress badge 55%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking55.png) ![Progress badge 87%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking87.png)
+![Progress badge 32%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking32.png) ![Progress badge 55%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking55.png) ![Progress badge 87%](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking87.png)  
 *Common usage: code coverage*
 
 ```javascript
@@ -50,7 +50,7 @@ var myBadge = new badge.Info({
   info: '12\'30'
 });
 ```
-![Info badge](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking_time.png)
+![Info badge](https://raw.githubusercontent.com/hmil/project-badge/master/images/baking_time.png)  
 *Common usage: package verison, date of last build*
 
 ```javascript
@@ -64,17 +64,17 @@ myBadge.renderTo(ctx, 0, 0);
 myBadge.status = false;
 myBadge.renderTo(ctx, 120, 0);
 ```
-![Boolean badge](https://raw.githubusercontent.com/hmil/project-badge/master/images/taste.png)
+![Boolean badge](https://raw.githubusercontent.com/hmil/project-badge/master/images/taste.png)  
 *Common usage: build: passing/failure*
 
-## API Reference
+# API Reference
 
-### badge.Boolean
+## badge.Boolean
 
 A badge that can take two states (namely 'failure' and 'success') depending
 on the value of 'status'
 
-#### Parameters
+### Parameters
 - `text` (String): the text shown on the left hand side of the badge
 - `status` (true/false): defines the state the badge is in
 - `successText` (String): text shown on the right side of the badge in case of success
@@ -82,49 +82,49 @@ on the value of 'status'
 - `statusText`: (String): text shown on the right side of the badge regardless of the state
 statusText has precedence over (failure|success)Text
 
-#### Typical use cases
+### Typical use cases
 - Show the result of a build in a CI environment (*à la* Travis-ci)
 
 
-### badge.Info
+## badge.Info
 
 A badge that shows a single information as a key-value pair
 
-#### Parameters
+### Parameters
 - `text` (String): the text shown on the left hand side of the badge (key)
 - `info` (String): the text shown on the right hand side of the badge (value)
 
-#### Typical use cases
+### Typical use cases
 - Show the current version of a package
 - Show the date of last build (useful when shown together with a build status badge)
 
 
-### badge.Progress
+## badge.Progress
 
 A badge that shows a real value bounded between a minimum and a maximum.
 The badge is color coded to indicate wether the value is in the "bad", "warning"
 or "good" interval (defined by the `bounds` parameter).
 
-#### Parameters
+### Parameters
 - `text` (String): the text shown on the left hand side of the badge (key)
 - `progress` (Number): the real value to show ranging from 0 to 100
 - `progressText` (String): the text shown on the right hand side of the badge (value)
 - `unit` (String): a string appended to the progressText (default: '%')
 - `bounds` (Array): two values that delimit the bad, warning and good zones (default: [40, 80])
 
-#### Typical use cases
+### Typical use cases
 - Show code coverage (it was designed specifically for this use).
 - Show any bounded continuous value.
 
 
-### badge.Badge
+## badge.Badge
 
 Base class for any badge class. You may create a badge of type badge directly but
 it won't generally be of great use.
 
 It defines the badge public interface and handles the rendering pipeline. 
 
-#### Public API
+### Public API
 The public API is defined by the parent class Badge and should not be overriden.
 - `constructor(params: {key: value})`  
   Constructs a badge and applies all parameters to this instance
@@ -143,7 +143,7 @@ The public API is defined by the parent class Badge and should not be overriden.
 - `Dimentions = {w: Number, h: Number}`  
   Format used to represent badge dimentions
 
-#### Rendering pipeline 
+### Rendering pipeline 
 The following methods are called in this order and may be overriden to implement custom graphics:
 
 - `drawBorder(ctx: RenderingContext, dimentions: Dimentions) -> void`  
@@ -162,7 +162,7 @@ To implement custom measurments, override `doMeasure`
   Actually performs the measure
 
 
-#### Parameters
+### Parameters
 The following parameters are assumed to be necessary for any class implementing a badge
 - `text` (String): default text shown in the badge, left aligned
 
