@@ -1,8 +1,10 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.badge=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function() {
-  var Badge, config;
+  var Badge, CanvasFactory, config;
 
   config = require('./config');
+
+  CanvasFactory = require('./CanvasFactory');
 
 
   /*
@@ -14,9 +16,10 @@
     It defines the badge public interface and handles the rendering pipeline. 
   
      *# Public API
-    - `constructor(params: {key: value})` 
+    The public API is defined by the parent class Badge and should not be overriden.
+    - `constructor(params: {key: value})`  
       Constructs a badge and applies all parameters to this instance
-    - `badge.[param]`
+    - `badge.[param]`  
       All parameters are directly accessible on the badge's instance. For instance:
       ```javascript
       // All badges drawn with this instance will now use the text 'build'
@@ -36,14 +39,19 @@
   
     - `drawBorder(ctx: RenderingContext, dimentions: Dimentions) -> void`  
       begins and constructs a path that defines the badge's borders (does not close nor draw it)
-    - `drawBackground(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    - `drawBackground(ctx: DrawingContext, dimentions: Dimentions) -> void`  
       draws the badge's background
-    - `drawBackgroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    - `drawBackgroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`  
       applies effects once the background was drawn
-    - `drawForeground(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    - `drawForeground(ctx: DrawingContext, dimentions: Dimentions) -> void`  
       draws the badge's foreground
-    - `drawForegroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    - `drawForegroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`  
       applies effects once the foreground was drawn
+  
+    To implement custom measurments, override `doMeasure`
+    - `doMeasure(ctx: RenderingContext) -> Dimentions`  
+      Actually performs the measure
+  
   
      *# Parameters
     The following parameters are assumed to be necessary for any class implementing a badge
@@ -83,21 +91,37 @@
       ctx.restore();
     };
 
+    Badge.prototype.asDOMNode = function() {
+      var canvas, ctx, dim;
+      canvas = CanvasFactory.createCanvas();
+      ctx = canvas.getContext('2d');
+      dim = this.measure(ctx);
+      canvas.width = dim.w;
+      canvas.height = dim.h;
+      this.renderTo(ctx);
+      return canvas;
+    };
+
     Badge.prototype.measure = function(ctx) {
-      var dim, textWidth;
+      var dim;
       ctx.save();
       ctx.font = config.get('font');
-      textWidth = this.text ? ctx.measureText(this.text).width : config.get('width');
-      dim = {
-        h: this.getHeight(),
-        w: textWidth + 2 * config.get('padding')
-      };
+      dim = this.doMeasure(ctx);
       ctx.restore();
       return dim;
     };
 
 
     /* Rendering pipeline */
+
+    Badge.prototype.doMeasure = function(ctx) {
+      var textWidth;
+      textWidth = this.text ? ctx.measureText(this.text).width : config.get('width');
+      return {
+        h: this.getHeight(),
+        w: textWidth + 2 * config.get('padding')
+      };
+    };
 
     Badge.prototype.drawBorder = function(ctx, _arg, radius) {
       var h, w;
@@ -171,7 +195,7 @@
 
 }).call(this);
 
-},{"./config":5}],2:[function(require,module,exports){
+},{"./CanvasFactory":3,"./config":6}],2:[function(require,module,exports){
 (function() {
   var Badge, Boolean, config,
     __hasProp = {}.hasOwnProperty,
@@ -207,9 +231,9 @@
       return Boolean.__super__.constructor.apply(this, arguments);
     }
 
-    Boolean.prototype.measure = function(ctx) {
+    Boolean.prototype.doMeasure = function(ctx) {
       var dimentions;
-      dimentions = Boolean.__super__.measure.call(this, ctx);
+      dimentions = Boolean.__super__.doMeasure.call(this, ctx);
       dimentions.w += this.measureStatus(ctx);
       return dimentions;
     };
@@ -261,7 +285,17 @@
 
 }).call(this);
 
-},{"./Badge":1,"./config":5}],3:[function(require,module,exports){
+},{"./Badge":1,"./config":6}],3:[function(require,module,exports){
+(function() {
+  module.exports = {
+    createCanvas: function() {
+      return document.createElement('canvas');
+    }
+  };
+
+}).call(this);
+
+},{}],4:[function(require,module,exports){
 (function() {
   var Badge, Info, config,
     __hasProp = {}.hasOwnProperty,
@@ -293,9 +327,9 @@
       return Info.__super__.constructor.apply(this, arguments);
     }
 
-    Info.prototype.measure = function(ctx) {
+    Info.prototype.doMeasure = function(ctx) {
       var dimentions;
-      dimentions = Info.__super__.measure.call(this, ctx);
+      dimentions = Info.__super__.doMeasure.call(this, ctx);
       dimentions.w += this.measureInfo(ctx);
       return dimentions;
     };
@@ -328,7 +362,7 @@
 
 }).call(this);
 
-},{"./Badge":1,"./config":5}],4:[function(require,module,exports){
+},{"./Badge":1,"./config":6}],5:[function(require,module,exports){
 (function() {
   var Badge, Progress, config,
     __hasProp = {}.hasOwnProperty,
@@ -372,9 +406,9 @@
       Progress.__super__.constructor.call(this, params);
     }
 
-    Progress.prototype.measure = function(ctx) {
+    Progress.prototype.doMeasure = function(ctx) {
       var dimentions;
-      dimentions = Progress.__super__.measure.call(this, ctx);
+      dimentions = Progress.__super__.doMeasure.call(this, ctx);
       dimentions.w += this.measureProgress(ctx);
       return dimentions;
     };
@@ -415,7 +449,7 @@
 
 }).call(this);
 
-},{"./Badge":1,"./config":5}],5:[function(require,module,exports){
+},{"./Badge":1,"./config":6}],6:[function(require,module,exports){
 (function() {
   module.exports = {
     data: {
@@ -448,7 +482,7 @@
 
 }).call(this);
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function() {
   var config;
 
@@ -466,5 +500,5 @@
 
 }).call(this);
 
-},{"./Badge":1,"./Boolean":2,"./Info":3,"./Progress":4,"./config":5}]},{},[6])(6)
+},{"./Badge":1,"./Boolean":2,"./Info":4,"./Progress":5,"./config":6}]},{},[7])(7)
 });

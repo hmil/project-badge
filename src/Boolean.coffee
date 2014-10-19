@@ -20,7 +20,7 @@ config = require('./config')
 ###
 module.exports = class Boolean extends Badge
   
-  measure: (ctx) ->
+  doMeasure: (ctx) ->
     dimentions = super(ctx)
     dimentions.w += @measureStatus(ctx)
     return dimentions

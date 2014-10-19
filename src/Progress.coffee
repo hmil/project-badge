@@ -27,7 +27,7 @@ module.exports = class Progress extends Badge
     if (!params.unit) then params.unit = '%'
     super(params)
 
-  measure: (ctx) ->
+  doMeasure: (ctx) ->
     dimentions = super(ctx)
     dimentions.w += @measureProgress(ctx)
     return dimentions

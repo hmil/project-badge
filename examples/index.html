@@ -9,7 +9,6 @@
 
   <script src="../dist/badge.js"></script>
   <script>
-  var ctx = document.getElementById('canvas').getContext('2d');
 
   var myBadge = new badge.Boolean({
     text: 'build',
@@ -17,6 +16,11 @@
     successText: 'passing',
     failureText: 'failed'
   });
+
+  document.body.appendChild(myBadge.asDOMNode());
+
+
+  var ctx = document.getElementById('canvas').getContext('2d');
 
   myBadge.renderTo(ctx);
   myBadge.status = false;

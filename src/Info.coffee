@@ -17,7 +17,7 @@ Badge = require('./Badge')
 ###
 module.exports = class Info extends Badge
   
-  measure: (ctx) ->
+  doMeasure: (ctx) ->
     dimentions = super(ctx)
     dimentions.w += @measureInfo(ctx)
     return dimentions
