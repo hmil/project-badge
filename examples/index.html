@@ -26,16 +26,23 @@
   myBadge.status = true;
   myBadge.renderTo(ctx, 140, 0);
 
-  var myProgress = new badge.Progress({
+  myBadge = new badge.Progress({
     text: 'coverage',
     progress: 32,
   });
 
-  myProgress.renderTo(ctx, 0, 80);
-  myProgress.progress = 55
-  myProgress.renderTo(ctx, 0, 120);
-  myProgress.progress = 87
-  myProgress.renderTo(ctx, 0, 160);
+  myBadge.renderTo(ctx, 0, 80);
+  myBadge.progress = 55
+  myBadge.renderTo(ctx, 0, 120);
+  myBadge.progress = 87
+  myBadge.renderTo(ctx, 0, 160);
+
+  myBadge = new badge.Info({
+    text: 'version',
+    info: '1.2.0'
+  });
+
+  myBadge.renderTo(ctx, 140, 120);
     
   </script>
 </body>
