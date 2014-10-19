@@ -1,26 +1,67 @@
 
-height = 20
-width = 50
-radius = 5
-font = '11px Verdana';
-margin_x = 5
+config = require('./config')
 
+###
+  # Badge
+  
+  Base class for any badge class. You may create a badge of type badge directly but
+  it won't generally be of great use.
+
+  It defines the badge public interface and handles the rendering pipeline. 
+
+  ## Public API
+  - `constructor(params: {key: value})` 
+    Constructs a badge and applies all parameters to this instance
+  - `badge.[param]`
+    All parameters are directly accessible on the badge's instance. For instance:
+    ```javascript
+    // All badges drawn with this instance will now use the text 'build'
+    badge.text = 'build';
+    ```
+  - `renderTo(ctx: RenderingContext [, x: Number] [, y: Number]) -> void`  
+    Renders the badge on the provided rendering context at position (x, y).
+    Is rendered at (0,0) by default.
+  - `measure(ctx: RenderingContext) -> Dimentions`  
+    measures the width and height the badge will occupy. Base implementation measures
+    the width taken by `text` and two margins and returns the configured height
+  - `Dimentions = {w: Number, h: Number}`  
+    Format used to represent badge dimentions
+  
+  ## Rendering pipeline 
+  The following methods are called in this order and may be overriden to implement custom graphics:
+
+  - `drawBorder(ctx: RenderingContext, dimentions: Dimentions) -> void`  
+    begins and constructs a path that defines the badge's borders (does not close nor draw it)
+  - `drawBackground(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    draws the badge's background
+  - `drawBackgroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    applies effects once the background was drawn
+  - `drawForeground(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    draws the badge's foreground
+  - `drawForegroundEffects(ctx: DrawingContext, dimentions: Dimentions) -> void`
+    applies effects once the foreground was drawn
+
+  ## Parameters
+  The following parameters are assumed to be necessary for any class implementing a badge
+  - `text` (String): default text shown in the badge, left aligned
+
+###
 module.exports = class Badge
   constructor: (params) ->
     @[key] = val for key, val of params
 
-  getHeight: () ->
-    return height
+
+  ### Public API ###
 
   renderTo: (ctx, x=0, y=0) ->
     ctx.save()
 
-    ctx.font = font
+    ctx.font = config.get('font')
 
     ctx.translate(x, y)
     dimentions = @measure(ctx)
 
-    @drawBorder(ctx, dimentions, radius)
+    @drawBorder(ctx, dimentions, config.get('border-radius'))
     ctx.clip()
 
     @drawBackground(ctx, dimentions)
@@ -34,14 +75,29 @@ module.exports = class Badge
 
   measure: (ctx) ->
     ctx.save()
-    ctx.font = font
-    textWidth = if @text then ctx.measureText(@text).width else width
-    dim = h: @getHeight(), w: textWidth + 2*margin_x
+    ctx.font = config.get('font')
+    textWidth = if @text then ctx.measureText(@text).width else config.get('width')
+    dim = h: @getHeight(), w: textWidth + 2*config.get('padding')
     ctx.restore()
     return dim
 
+
+  ### Rendering pipeline ###
+
+  drawBorder: (ctx, {w, h}, radius) ->
+    ctx.moveTo(radius,0)
+    ctx.lineTo(w-radius, 0)
+    ctx.arcTo(w, 0, w, radius, radius)
+    ctx.lineTo(w, h-radius)
+    ctx.arcTo(w, h, w-radius, h, radius)
+    ctx.lineTo(radius, h)
+    ctx.arcTo(0, h, 0, h-radius, radius)
+    ctx.lineTo(0, radius)
+    ctx.arcTo(0, 0, radius, 0, radius)
+
+
   drawBackground: (ctx, {w, h}) ->
-    ctx.fillStyle = '#444'
+    ctx.fillStyle = config.get('color-background')
     ctx.fillRect(0, 0, w, h)
 
   drawBackgroundEffects: (ctx, {w, h}) ->
@@ -57,25 +113,18 @@ module.exports = class Badge
   drawForeground: (ctx, dimentions) ->
     @drawText(ctx, dimentions, @text)
 
-  drawForegroundEffects: (ctx, {w, h}) ->
-    return
+  drawForegroundEffects: (ctx, {w, h}) -> return undefined
 
+
+  ### Utility methods ###
+
+  getHeight: () ->
+    return config.get('height')
 
   drawText: (ctx, {w, h}, text, options = {}) ->
-    ctx.fillStyle = '#fff'
+    ctx.fillStyle = config.get('color-text')
     if options.align is 'right'
-      x = w - (if options.margin then options.margin else 5) - ctx.measureText(text).width
+      x = w - config.get('padding') - ctx.measureText(text).width
     else
-      x = if options.margin then options.margin else 5
-    ctx.fillText(text, x, 14)
-
-  drawBorder: (ctx, {w, h}, radius) ->
-    ctx.moveTo(radius,0)
-    ctx.lineTo(w-radius, 0)
-    ctx.arcTo(w, 0, w, radius, radius)
-    ctx.lineTo(w, h-radius)
-    ctx.arcTo(w, h, w-radius, h, radius)
-    ctx.lineTo(radius, h)
-    ctx.arcTo(0, h, 0, h-radius, radius)
-    ctx.lineTo(0, radius)
-    ctx.arcTo(0, 0, radius, 0, radius)
+      x = config.get('padding')
+    ctx.fillText(text, x, config.get('text-height'))
