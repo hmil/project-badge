@@ -69,6 +69,25 @@ myBadge.renderTo(ctx, 120, 0);
 
 # API Reference
 
+## badge.config(conf)
+
+Use this function to set global configuration settings. Available settings are:
+```coffeescript
+'color-success': '#0a0'
+'color-failure': '#a00'
+'color-warning': '#880'
+'color-info': '#3BC2EB'
+'color-background': '#444'
+'color-text': '#fff'      
+
+'font': '11px Verdana'      # the same font for all texts
+'border-radius': 5          # like css border-radius
+'padding': 5                # x padding for the text
+'text-height': 14           # text position, y-axis
+
+'width': 50                 # default width
+'height': 20                # default height
+```
 ## badge.Boolean
 
 A badge that can take two states (namely 'failure' and 'success') depending
