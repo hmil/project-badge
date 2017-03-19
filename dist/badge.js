@@ -217,6 +217,7 @@
     - `status` (true/false): defines the state the badge is in
     - `successText` (String): text shown on the right side of the badge in case of success
     - `failureText` (String): text shown on the right side of the badge in case of failure
+    - `unknownText` (String): text shown on the right side of the badge in case the status is unknown
     - `statusText`: (String): text shown on the right side of the badge regardless of the state
     statusText has precedence over (failure|success)Text
   
@@ -250,6 +251,9 @@
       if (this.statusText != null) {
         return this.statusText;
       }
+      if (this.getStatus() == null) {
+        return this.unknownText;
+      }
       if (this.getStatus()) {
         return this.successText;
       } else {
@@ -258,6 +262,9 @@
     };
 
     Boolean.prototype.getStatus = function() {
+      if (this.status == null) {
+        return this.status;
+      }
       if (this.inverse) {
         return !this.status;
       } else {
@@ -268,7 +275,13 @@
     Boolean.prototype.drawBackground = function(ctx, dimentions) {
       var statusWidth;
       Boolean.__super__.drawBackground.call(this, ctx, dimentions);
-      ctx.fillStyle = this.getStatus() ? config.get('color-success') : config.get('color-failure');
+      if (this.getStatus() == null) {
+        ctx.fillStyle = config.get('color-unknown');
+      } else if (this.getStatus()) {
+        ctx.fillStyle = config.get('color-success');
+      } else {
+        ctx.fillStyle = config.get('color-failure');
+      }
       statusWidth = this.measureStatus(ctx);
       return ctx.fillRect(dimentions.w - statusWidth, 0, statusWidth, dimentions.h);
     };
@@ -455,6 +468,7 @@
     data: {
       'color-success': '#0a0',
       'color-failure': '#a00',
+      'color-unknown': '#aaa',
       'color-warning': '#880',
       'color-info': '#3BC2EB',
       'color-background': '#444',

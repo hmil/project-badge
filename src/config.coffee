@@ -3,6 +3,7 @@ module.exports =
   data:
     'color-success': '#0a0'
     'color-failure': '#a00'
+    'color-unknown': '#aaa'
     'color-warning': '#880'
     'color-info': '#3BC2EB'
     'color-background': '#444'

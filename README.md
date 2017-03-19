@@ -58,11 +58,14 @@ var myBadge = new badge.Boolean({
   text: 'taste',
   status: true,
   successText: 'yummy',
-  failureText: 'yuck !'
+  failureText: 'yuck !',
+  unknownText: 'what ?'
 });
 myBadge.renderTo(ctx, 0, 0);
 myBadge.status = false;
 myBadge.renderTo(ctx, 120, 0);
+myBadge.status = null;
+myBadge.renderTo(ctx, 240, 0);
 ```
 ![Boolean badge](https://raw.githubusercontent.com/hmil/project-badge/master/images/taste.png)  
 *Common usage: build: passing/failure*
@@ -75,6 +78,7 @@ Use this function to set global configuration settings. Available settings are:
 ```coffeescript
 'color-success': '#0a0'
 'color-failure': '#a00'
+'color-unknown': '#aaa'
 'color-warning': '#880'
 'color-info': '#3BC2EB'
 'color-background': '#444'
@@ -98,6 +102,7 @@ on the value of 'status'
 - `status` (true/false): defines the state the badge is in
 - `successText` (String): text shown on the right side of the badge in case of success
 - `failureText` (String): text shown on the right side of the badge in case of failure
+- `unknownText` (String): text shown on the right side of the badge in case the status is null
 - `statusText`: (String): text shown on the right side of the badge regardless of the state
 statusText has precedence over (failure|success)Text
 

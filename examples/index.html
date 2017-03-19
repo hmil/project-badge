@@ -5,7 +5,7 @@
   <title>Project-Badge example</title>
 </head>
 <body>
-  <canvas width="300" height="300" id="canvas" style="margin: 30px"></canvas>
+  <canvas width="500" height="300" id="canvas" style="margin: 30px"></canvas>
 
   <script src="../dist/badge.js"></script>
   <script>
@@ -14,7 +14,8 @@
     text: 'build',
     status: true,
     successText: 'passing',
-    failureText: 'failed'
+    failureText: 'failed',
+    unknownText: 'unknown',
   });
 
   document.body.appendChild(myBadge.asDOMNode());
@@ -25,10 +26,16 @@
   myBadge.renderTo(ctx);
   myBadge.status = false;
   myBadge.renderTo(ctx, 0, 40);
+  myBadge.status = null;
+  myBadge.renderTo(ctx, 280, 40);
+
+  myBadge.status = false;
   myBadge.inverse = true;
   myBadge.renderTo(ctx, 140, 40);
   myBadge.status = true;
   myBadge.renderTo(ctx, 140, 0);
+  myBadge.status = null;
+  myBadge.renderTo(ctx, 280, 0);
 
   myBadge = new badge.Progress({
     text: 'coverage',
@@ -51,7 +58,7 @@
   badge.config({'color-info': '#aaa'});
 
   myBadge.renderTo(ctx, 140, 160);
-    
+
   </script>
 </body>
 </html>

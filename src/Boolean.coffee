@@ -12,6 +12,7 @@ config = require('./config')
   - `status` (true/false): defines the state the badge is in
   - `successText` (String): text shown on the right side of the badge in case of success
   - `failureText` (String): text shown on the right side of the badge in case of failure
+  - `unknownText` (String): text shown on the right side of the badge in case the status is unknown
   - `statusText`: (String): text shown on the right side of the badge regardless of the state
   statusText has precedence over (failure|success)Text
 
@@ -19,7 +20,7 @@ config = require('./config')
   - Show the result of a build in a CI environment (*à la* Travis-ci)
 ###
 module.exports = class Boolean extends Badge
-  
+
   doMeasure: (ctx) ->
     dimentions = super(ctx)
     dimentions.w += @measureStatus(ctx)
@@ -34,13 +35,21 @@ module.exports = class Boolean extends Badge
 
   getText: () ->
     return @statusText if @statusText?
+    return @unknownText if !@getStatus()?
     return if @getStatus() then @successText else @failureText
 
-  getStatus: () -> return if @inverse then !@status else @status
+  getStatus: () ->
+    return @status if !@status?
+    return if @inverse then !@status else @status
 
   drawBackground: (ctx, dimentions) ->
     super(ctx, dimentions)
-    ctx.fillStyle = if @getStatus() then config.get('color-success') else config.get('color-failure')
+    if !@getStatus()?
+        ctx.fillStyle = config.get('color-unknown')
+    else if @getStatus()
+        ctx.fillStyle = config.get('color-success')
+    else
+        ctx.fillStyle = config.get('color-failure')
     statusWidth = @measureStatus(ctx)
     ctx.fillRect(dimentions.w - statusWidth, 0, statusWidth, dimentions.h)
 
