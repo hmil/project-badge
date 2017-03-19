@@ -18,7 +18,7 @@ Download [badge.js](https://raw.githubusercontent.com/hmil/project-badge/master/
         status: true,
         statusText: 'baked !'
       });
-      
+
       document.body.appendChild(myBadge.asDOMNode());
     </script>
   </body>
@@ -146,7 +146,7 @@ or "good" interval (defined by the `bounds` parameter).
 Base class for any badge class. You may create a badge of type badge directly but
 it won't generally be of great use.
 
-It defines the badge public interface and handles the rendering pipeline. 
+It defines the badge public interface and handles the rendering pipeline.
 
 ### Public API
 The public API is defined by the parent class Badge and should not be overriden.
@@ -167,7 +167,7 @@ The public API is defined by the parent class Badge and should not be overriden.
 - `Dimentions = {w: Number, h: Number}`  
   Format used to represent badge dimentions
 
-### Rendering pipeline 
+### Rendering pipeline
 The following methods are called in this order and may be overriden to implement custom graphics:
 
 - `drawBorder(ctx: RenderingContext, dimentions: Dimentions) -> void`  
@@ -193,5 +193,9 @@ The following parameters are assumed to be necessary for any class implementing 
 
 # Changelog
 
+**0.2.0** -- *Mar 19, 2017*
+- Add "unknown" status badge (thanks @tforgione)
+- Add npm task to build the lib with grunt
+
 **0.1.0** -- *Oct 19, 2014*
-Initial project-badge release
+- Initial project-badge release
